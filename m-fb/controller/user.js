@@ -15,12 +15,11 @@ const keys = require('../config/keys')
 module.exports = {
     userRegister: async (req, res, next) => {
         try {
-            let errors = {}
             const { name, email, password, phoneNumber } = req.body;
             const user = await User.findOne({ email })
             if (user) {
-                errors.email = "Email already exist"
-                return res.status(400).json(errors)
+                return res.status(400).json({ success: false, message: "Email already exist." })
+
             }
             let hashedPassword;
             hashedPassword = await bcrypt.hash(password, 8)
@@ -49,13 +48,11 @@ module.exports = {
             const { email, password } = req.body;
             const user = await User.findOne({ email })
             if (!user) {
-                errors.email = "Email doesnt not exist"
-                return res.status(400).json(errors)
+                return res.status(400).json({ success: false, message: "Email doesnt not exist." })
             }
             const isCorrect = await bcrypt.compare(password, user.password)
             if (!isCorrect) {
-                errors.password = 'Invalid Credentials';
-                return res.status(404).json(errors);
+                return res.status(400).json({ success: false, message: "Invalid credentials." })
             }
             const { _id, name, phoneNumber } = user
             const payload = {
@@ -179,7 +176,7 @@ module.exports = {
         }
     },
     getSuggestionForTheDay: async (req, res) => {
-        try {today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+        try {
             let today = new Date()
             today = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
             const suggestions = await Suggestion.find({

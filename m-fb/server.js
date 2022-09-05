@@ -52,12 +52,7 @@ app.use((error, req, res, next) => {
 const PORT = process.env.PORT || 4000;
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/mfb", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
+  .connect("mongodb+srv://sample_project_user:m1RNPhjfk78CaxXl@cluster0.b6pao.mongodb.net/mfb?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("server Started");
     app.listen(PORT);
